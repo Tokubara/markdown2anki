@@ -1,28 +1,10 @@
-# markdown2anki
+实现中参考了[这个repo](https://github.com/L-M-Sherlock/markdown2anki).
 
- 将md笔记转换成可以导入Anki的格式
+用法: `python3 md2tsv.py markdown文件路径 tsv路径`
 
-# 项目结构
+##### 作用
 
-```
-├── Basic
-│	├── 近世代数note.md # 转 Basic 的笔记格式样例
-│	└── anki_basic.txt # 可导入 Anki 的 txt
-├── Cloze
-│	├── 计算机组成原理Notenote.md # 转 Cloze 的笔记格式样例
-│	└── anki_cloze.txt # 可导入 Anki 的 txt
-├── note2basic.py # note 转 basic 卡片
-├── note2cloze.py # note 转 cloze 卡片
-├── utils.py # 封装一下意思意思
-└── 模板.apkg # 配套笔记的模板
-```
+本repo并不对一般的markdown适用(当然略作修改也可以, 但这不是它的目的), 它适用的是由ithoughtsx导出的markdown. 这样的markdown有严格的父子节点关系.
 
-# 使用方法
+结果tsv有3个字段. 第一个字段是问题, 第二个字段是答案, 第三个字段是本repo的特点, 是父节点标题. 这样方便聚类.
 
-模仿笔记样例格式写自己的笔记，将md文件放入对应的文件夹（Baisc/Cloze），然后改写 note2basic.py/note2cloze.py 中的路径，最后运行对应脚本即可得到可导入Anki的txt文件。
-
-建议配合本项目提供的模板一同使用。
-
-# 鸣谢
-
-本项目由知乎专栏《[AnkiX高考](https://zhuanlan.zhihu.com/ankigaokao)》赞助提供。
