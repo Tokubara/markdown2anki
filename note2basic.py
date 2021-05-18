@@ -68,7 +68,7 @@ with open(md_path, 'r', encoding='UTF-8') as note_file:
             # {{{3 先添加上一次的笔记, 因为遇到一个title意味着有一个新的笔记
             # 第一次除外
             if title_content and note_content:
-                assert title_level>1
+                assert title_level>1,line
                 assert level_titles[title_level-1]
                 cards.append(title_content+"\t"+note_content+"\t"+level_titles[title_level-1]+"\n") # TODO 加入expandtab处理, 确保没有tab, 之所以如此, 是因为;非常常见, 在c代码中
             # 先获得标题等级
