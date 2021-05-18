@@ -52,6 +52,7 @@ md_path="/Users/quebec/Desktop/nemu_test.markdown" # TODO 支持命令行参数
 output_path="/Users/quebec/Desktop/anki.tsv"
 level_titles=[0]*10 # 有点hash表的意思, level_titles[i]表示的是level为i的对应的最近的标题, 其中, level从1开始
 title_content=''
+note_content=''
 cards=[]
 
 # {{{1 解析markdown
