@@ -13,7 +13,7 @@ italic_pattern=re.compile(r"(?<!\*)\*([^*]+?)\*(?!\*)")
 image_pattern=re.compile("!\[.+\]\((.+)\)")
 
 # {{{1 preprocess
-def preprocess(line): # TODO
+def preprocess(line):
     '''处理数学公式, 加粗'''
     line=line.strip()
     # $$替换为\(\)
@@ -74,7 +74,7 @@ def md2tsv(md_path,output_path):
                     assert level_titles[title_level-1],title_content+" "+note_content
                     new_card=title_content+"\t"+note_content+"\t"+level_titles[title_level-1]+"\n"
                     assert new_card.count("\t")==2
-                    cards.append(new_card) # TODO 加入expandtab处理, 确保没有tab, 之所以如此, 是因为;非常常见, 在c代码中
+                    cards.append(new_card) # 确保没有tab, 之所以如此, 是因为;非常常见, 在c代码中
                     note_content=''
                 # 先获得标题等级
                 title_level=len(re.match(sharps_pattern,line).group(1))
@@ -86,10 +86,10 @@ def md2tsv(md_path,output_path):
         if title_content and note_content:
             assert title_level>1
             assert level_titles[title_level-1]
-            cards.append(title_content+"\t"+note_content+"\t"+level_titles[title_level-1]+"\n") # TODO 加入expandtab处理, 确保没有tab, 之所以如此, 是因为;非常常见, 在c代码中
+            cards.append(title_content+"\t"+note_content+"\t"+level_titles[title_level-1]+"\n")
 
     # {{{1 写入文件
-    with open(output_path, 'w', encoding='UTF-8') as output_file: # TODO 加入命令行参数
+    with open(output_path, 'w', encoding='UTF-8') as output_file:
         output_file.writelines(cards)
 
 if __name__ == "__main__":
