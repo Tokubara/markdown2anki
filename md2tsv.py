@@ -28,7 +28,7 @@ def preprocess(line):
     # 处理图片语法
     line=re.sub(image_pattern, lambda match_obj:"<img src=\""+os.path.split(match_obj.group(1))[-1]+"\">", line)
     # \n替换为<br>
-    line=line.replace("\n","<br>")
+    line=line+"<br>"
     
     return line
 
