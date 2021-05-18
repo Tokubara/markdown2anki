@@ -24,7 +24,7 @@ def preprocess(line):
     # ****替换为<b> </b>
     line=re.sub(bold_pattern, lambda match_obj:"<b>"+match_obj.group(1)+"</b>", line)
     # **替换为<i> </i>
-    line=re.sub(italic_pattern, lambda match_obj:"<i>"+match_obj.group(1)+"</i>", line)
+    # line=re.sub(italic_pattern, lambda match_obj:"<i>"+match_obj.group(1)+"</i>", line)
     # 处理图片语法
     line=re.sub(image_pattern, lambda match_obj:"<img src=\""+os.path.split(match_obj.group(1))[-1]+"\">", line)
     # \n替换为<br>
