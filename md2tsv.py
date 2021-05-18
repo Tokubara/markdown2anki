@@ -17,7 +17,7 @@ def preprocess(line):
     '''处理数学公式, 加粗'''
     line=line.strip()
     # $$替换为\(\)
-    line=re.sub(math_pattern, lambda match_obj:"\("+match_obj.group(1)+"\)", line)
+    # line=re.sub(math_pattern, lambda match_obj:"\("+match_obj.group(1)+"\)", line)
     # 分开{{和}}(anki字段语法)
     line=line.replace('{{', '{ {')
     line=line.replace('}}', '} }')
