@@ -1,7 +1,9 @@
+#!/usr/bin/env python3 
 import re
 import sys
 import os
 import shutil
+import argparse
 
 # {{{1 用上的regex
 sharps=r"^(##+)(?= )" # 空格是必须的, 因为c有宏定义
@@ -51,7 +53,7 @@ def add_images(line):
             shutil.copy(img_path,anki_media_path)
             print(f"add image: {img_path}")
 
-def md2tsv(md_path,output_path):
+def md2tsv(md_path,output_path, recursive):
     level_titles=[0]*10 # 有点hash表的意思, level_titles[i]表示的是level为i的对应的最近的标题, 其中, level从1开始
     title_content=''
     note_content=''
@@ -93,4 +95,9 @@ def md2tsv(md_path,output_path):
         output_file.writelines(cards)
 
 if __name__ == "__main__":
-    md2tsv(*sys.argv[1:])
+    parser = argparse.ArgumentParser(description="convert markdown exported by ithoughtsx to tsv which can be imported to anki Basic Notes(Front, Back, Remark)")
+    parser.add_argument('md_path', type=str, help='path of markdown file', nargs="?", default="/Users/quebec/Desktop/tmp.markdown")
+    parser.add_argument('output_path', type=str, help='path of result tsv file', nargs="?", default="/Users/quebec/Desktop/anki.tsv")
+    parser.add_argument("-r", dest="recursive", help="Remark add all ancestors", action="store_true", default=False)
+    args = parser.parse_args()
+    md2tsv(args.md_path, args.output_path, args.recursive)
