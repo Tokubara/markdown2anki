@@ -6,7 +6,7 @@ import shutil
 import argparse
 
 # {{{1 用上的regex
-sharps=r"^(##+)(?= )" # 空格是必须的, 因为c有宏定义
+sharps=r"^(##+)(?= )" # 这里的空格本意是与c的宏定义区分, 如果加了空格, c的宏定义的确可以解决, 但是python, bash之类的注释还是会有#, 而且也有空格, 于是规定标题级别至少为2. 因此, 真正导出的时候, 需要添加一个毫无意义的根节点. 解析时会跳过第一行, 也就是唯一的一级标题. 这样就能保证解析中不会遇到一级标题, 如果是`# `, 我们就可以保证它是注释, 是note_content的内容
 sharps_pattern=re.compile(sharps)
 math_formula=r"(?<!\$)\$([^$]+?)\$(?!\$)"
 math_pattern=re.compile(math_formula)
@@ -53,6 +53,17 @@ def add_images(line):
             shutil.copy(img_path,anki_media_path)
             print(f"add image: {img_path}")
 
+def add_card(title_level, level_titles, title_content, note_content, cards, recursive):
+    assert title_level>1
+    assert level_titles[title_level-1],f"title_content:{title_content}, note_content:{note_content}"
+    if recursive:
+        remark = ";".join(level_titles[2:title_level])
+    else:
+        remark = level_titles[title_level-1]
+    new_card=title_content+"\t"+note_content+"\t"+remark+"\n" # remark就是表示Remark字段
+    assert new_card.count("\t")==2 # 确保没有tab, 之所以如此, 是因为;非常常见, 在c代码中
+    cards.append(new_card)
+
 def md2tsv(md_path,output_path, recursive):
     level_titles=[0]*10 # 有点hash表的意思, level_titles[i]表示的是level为i的对应的最近的标题, 其中, level从1开始
     title_content=''
@@ -72,11 +83,7 @@ def md2tsv(md_path,output_path, recursive):
                 # {{{3 标题先添加上一次的笔记, 因为遇到一个title意味着有一个新的笔记
                 # 第一次除外
                 if title_content and note_content:
-                    assert title_level>1,line
-                    assert level_titles[title_level-1],title_content+" "+note_content
-                    new_card=title_content+"\t"+note_content+"\t"+level_titles[title_level-1]+"\n"
-                    assert new_card.count("\t")==2
-                    cards.append(new_card) # 确保没有tab, 之所以如此, 是因为;非常常见, 在c代码中
+                    add_card(title_level, level_titles, title_content, note_content, cards, recursive)
                     note_content=''
                 # 先获得标题等级
                 title_level=len(re.match(sharps_pattern,line).group(1))
@@ -86,9 +93,7 @@ def md2tsv(md_path,output_path, recursive):
                 note_content=note_content+preprocess(line)
 
         if title_content and note_content:
-            assert title_level>1
-            assert level_titles[title_level-1]
-            cards.append(title_content+"\t"+note_content+"\t"+level_titles[title_level-1]+"\n")
+            add_card(title_level, level_titles, title_content, note_content, cards, recursive)
 
     # {{{1 写入文件
     with open(output_path, 'w', encoding='UTF-8') as output_file:
